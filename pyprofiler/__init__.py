@@ -1,10 +1,11 @@
+import flameprof
 import cProfile
 import pstats
 from functools import wraps
 
 
 def pyprofiler(
-    output_file=None, sort_by="time", lines_to_print=None, strip_dirs=True
+    output_file=None, sort_by="time", lines_to_print=None, strip_dirs=True, flame_file=None
 ):
     def inner(func):
         @wraps(func)
@@ -15,7 +16,10 @@ def pyprofiler(
             retval = func(*args, **kwargs)
             pr.disable()
             pr.dump_stats(_output_file)
-
+            if flame_file:
+                s = pstats.Stats(_output_file)
+                with open(flame_file, "w") as f:
+                    flameprof.render(s.stats, f, "svg")
             with open(_output_file, "w") as f:
                 ps = pstats.Stats(pr, stream=f)
                 if strip_dirs:
