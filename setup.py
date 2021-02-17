@@ -7,6 +7,6 @@ setup(
     description="Decorator for runtime profiling.",
     url="https://github.com/dwalter/pyprofiler.git",
     packages=["pyprofiler"],
-    # install_requires=[],
+    install_requires=["flameprof"],
     python_requires=">=3.6",
 )
